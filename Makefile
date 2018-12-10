@@ -74,6 +74,64 @@ common-en:
 
 en: index-en puzzle-en maze-en bird-en turtle-en movie-en music-en pond-docs-en pond-tutor-en pond-duck-en genetics-en gallery-en
 
+index-zh-hans:
+	mkdir -p appengine/generated/zh-hans/
+	$(SOY_COMPILER) --outputPathFormat appengine/index/generated/zh-hans/soy.js --srcs appengine/index/template.soy
+	python build-app.py index zh-hans
+
+puzzle-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/puzzle/generated/zh-hans/soy.js --srcs appengine/puzzle/template.soy
+	python build-app.py puzzle zh-hans
+
+maze-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/maze/generated/zh-hans/soy.js --srcs appengine/maze/template.soy
+	python build-app.py maze zh-hans
+
+bird-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/bird/generated/zh-hans/soy.js --srcs appengine/bird/template.soy
+	python build-app.py bird zh-hans
+
+turtle-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/turtle/generated/zh-hans/soy.js --srcs appengine/turtle/template.soy
+	python build-app.py turtle zh-hans
+
+movie-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/movie/generated/zh-hans/soy.js --srcs appengine/movie/template.soy
+	python build-app.py movie zh-hans
+
+music-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/music/generated/zh-hans/soy.js --srcs appengine/music/template.soy
+	python build-app.py music zh-hans
+
+pond-docs-zh-hans:
+	mkdir -p appengine/pond/generated/zh-hans/
+	$(SOY_COMPILER) --outputPathFormat appengine/pond/docs/generated/zh-hans/soy.js --srcs appengine/pond/docs/template.soy
+	python build-app.py pond/docs zh-hans
+
+pond-tutor-zh-hans: pond-common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/pond/tutor/generated/zh-hans/soy.js --srcs appengine/pond/tutor/template.soy
+	python build-app.py pond/tutor zh-hans
+
+pond-duck-zh-hans: pond-common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/pond/duck/generated/zh-hans/soy.js --srcs appengine/pond/duck/template.soy
+	python build-app.py pond/duck zh-hans
+
+genetics-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/genetics/generated/zh-hans/soy.js --srcs appengine/genetics/template.soy
+	python build-app.py genetics zh-hans
+
+gallery-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/gallery/generated/zh-hans/soy.js --srcs appengine/gallery/template.soy
+	python build-app.py gallery zh-hans
+
+pond-common-zh-hans: common-zh-hans
+	$(SOY_COMPILER) --outputPathFormat appengine/pond/generated/zh-hans/soy.js --srcs appengine/pond/template.soy
+
+common-zh-hans:
+	$(SOY_COMPILER) --outputPathFormat appengine/generated/zh-hans/soy.js --srcs appengine/template.soy
+
+zh-hans: index-zh-hans puzzle-zh-hans maze-zh-hans bird-zh-hans turtle-zh-hans movie-zh-hans music-zh-hans pond-docs-zh-hans pond-tutor-zh-hans pond-duck-zh-hans genetics-zh-hans gallery-zh-hans
+
 languages:
 	$(SOY_EXTRACTOR) --outputFile extracted_msgs.xlf --srcs $(ALL_TEMPLATES)
 	i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates $(ALL_TEMPLATES)
@@ -84,6 +142,52 @@ languages:
 	@for app in $(USER_APPS); do \
 	  python build-app.py $$app; \
 	done
+
+langs:
+	$(SOY_EXTRACTOR) --outputFile extracted_msgs.xlf --srcs $(ALL_TEMPLATES)
+	i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates $(ALL_TEMPLATES)
+
+	# index,puzzle,maze,bird,turtle,movie,music,pond/docs,pond,pond/tutor,pond/duck,gallery
+	mkdir -p appengine/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/generated --template appengine/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/index/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/index/generated --template appengine/index/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/puzzle/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/puzzle/generated --template appengine/puzzle/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/maze/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/maze/generated --template appengine/maze/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/bird/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/bird/generated --template appengine/bird/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/turtle/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/turtle/generated --template appengine/turtle/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/movie/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/movie/generated --template appengine/movie/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/music/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/music/generated --template appengine/music/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/pond/docs/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/pond/docs/generated --template appengine/pond/docs/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/pond/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/pond/generated --template appengine/pond/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/pond/tutor/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/pond/tutor/generated --template appengine/pond/tutor/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/pond/duck/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/pond/duck/generated --template appengine/pond/duck/template.soy --key_file json/keys.json json/*.json; \
+	mkdir -p appengine/gallery/generated; \
+	i18n/json_to_js.py --path_to_jar third-party --output_dir appengine/gallery/generated --template appengine/gallery/template.soy --key_file json/keys.json json/*.json; \
+	
+	# index,puzzle,maze,bird,turtle,movie,music,pond/docs,pond,pond/tutor,pond/duck,gallery
+	python build-app.py index zh-hans; \
+	python build-app.py puzzle zh-hans; \
+	python build-app.py maze zh-hans; \
+	python build-app.py bird zh-hans; \
+	python build-app.py turtle zh-hans; \
+	python build-app.py movie zh-hans; \
+	python build-app.py music zh-hans; \
+	python build-app.py pond/docs zh-hans; \
+	python build-app.py pond zh-hans; \
+	python build-app.py pond/tutor zh-hans; \
+	python build-app.py pond/duck zh-hans; \
+	python build-app.py gallery zh-hans; \
 
 deps:
 	mkdir -p third-party
